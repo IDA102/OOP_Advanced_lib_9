@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define	  stop __asm nop
 #pragma warning(disable: 4786)
-//#include <typeinfo>
+#include <typeinfo>
 #include <tchar.h>
 #include <string.h>
 #include <cstdio>
@@ -18,10 +18,11 @@
 
 //#include "stdafx.h"
 #include <stack>
+#include <queue>
 #include <set>
 #include <map>
 #include <clocale>
 using namespace std;
 //#include "MyString.h"
-//#include "Point.h"
+#include "Point.h"
 //#include "ContOut.h"
