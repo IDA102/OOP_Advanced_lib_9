@@ -14,6 +14,16 @@ template <typename T, typename TT, typename TTT> ostream& operator<<(ostream& os
 	}
 	return os;
 };
+template <typename T, typename TT, typename TTT> ostream& operator<<(ostream& os, multimap<T, TT, TTT> ms)
+{
+	typename map<T, TT>::iterator it = ms.begin();
+	while (it != ms.end())
+	{
+		cout << (*it).first << "=" << (*it).second << endl;
+		++it;
+	}
+	return os;
+};
 template <typename T> ostream& operator<<(ostream& os, string ms)
 {
 	cout << ms.back(); endl;
@@ -87,11 +97,37 @@ ostream& operator<<(ostream& os, const Point &ms)
 	cout << ms.x << " " << ms.y;
 	return os;
 }
+ostream& operator<<(ostream& os, pair<string, string> ms)
+{
+	cout << ms.first << "=" << ms.second << endl;
+	return os;
+};
 template<typename T>struct sort_ABC
 {//Почему я не могу определить и отправить предикатор(ответ, потому что так класс устроен(тип компаратор) меня не устраивает)
 	bool operator()(const T &a, const  T &b)const
 	{
 		return (a[0] > b[0]);
+	}
+};
+template<typename T>struct sort_ABC2
+{
+	bool operator()(const T &a, const  T &b)const
+	{
+		return (a > b);
+	}
+};
+template<typename T> struct sortString
+{
+	bool operator()(const char* a, const char* b)const
+	{
+		return (strcmp(a, b) < 0);
+	}	
+};
+template<typename T> struct sortString2
+{
+	bool operator()(const char* a, const char* b)const
+	{
+		return (strcmp(a, b) < 0);
 	}
 };
 //bool sort_ABC(string a,string b)
@@ -101,6 +137,7 @@ template<typename T>struct sort_ABC
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	setlocale(LC_ALL, "Russian");
 /*
 Напишите шаблон функции для вывода значений stack, queue, priority_queue
 обратите внимание на то, что контейнеры предоставляют РАЗНЫЕ методы для 
@@ -255,18 +292,10 @@ map, multiset
 */
 	vector<string> vString = { "QWE" , "RTY" , "UIO" , "QWE" , "RTY" };
 	map<string, int, sort_ABC<string>> mString;
-	map < string, int>::iterator iteratorString;
-	vector<string>::iterator iterator_vector = vString.begin();
 
-	while (iterator_vector != vString.end())//Мне не нравится такая реализация. Слишком трудоёмко.
+	for (size_t i = 0; i < vString.size(); i++)
 	{
-		iteratorString = mString.find(*iterator_vector);
-		if (iteratorString == mString.end())
-		{
-			mString.insert({ *iterator_vector,1 });
-		}
-		else	{ ++(*iteratorString).second; }
-		++iterator_vector;
+		mString[vString[i]] = mString[vString[i]] + 1;
 	}
 	cout << mString;
 	stop
@@ -282,26 +311,14 @@ const char* words[] = {"Abba", "Alfa", "Beta", "Beauty" ,...};
 //'B' -  "Beauty" "Beta"  ...
 //...
 */
-	const char* words[] = { "Abba", "Alfa", "Beta", "Beauty, Abba", "Alfa", "Beta", "Beauty" };
-	map<char,char*> mWords;
-
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-
-
-
-
-	while (iterator_vector != vString.end())//Мне не нравится такая реализация. Слишком трудоёмко.
+	const char* words[] = { "Abba", "Alfa", "Beta", "Beauty", "Abba", "Alfa", "Beta", "Beauty" };
+	//const char* words[] = { "AA", "AAA", "BB", "BBB", "CC", "CCC", "Q", "QA" };
+	stop
+	map<char,set<const char*,sortString<const char*>>,sort_ABC2<char>> mWords;
+	for (size_t i = 0; i < 8; i++)
 	{
-		iteratorString = mString.find(*iterator_vector);
-		if (iteratorString == mString.end())
-		{
-			mString.insert({ *iterator_vector,1 });
-		}
-		else { ++(*iteratorString).second; }
-		++iterator_vector;
+		(mWords[*words[i]]).insert(words[i]);
 	}
-	cout << mString;
-
 	stop
 /*
 ж)
@@ -311,18 +328,49 @@ const char* words[] = {"Abba", "Alfa", "Beta", "Beauty" ,...};
 Сами группы тоже должны быть упорядочены по номеру		
 номера 
 */
-
+	map<int, multiset<const char*, sortString2<const char*>>> mGroups;
+	(mGroups[4512]).insert("Paramoshkin");
+	(mGroups[4513]).insert("Paramoshkin");
+	(mGroups[4513]).insert("Paramoshkin");
+	(mGroups[4513]).insert("Ivanov");
+	
+	stop
 ////////////////////////////////////////////////////////////////////////////////////
 /*
 multimap
 а) создайте "англо-русский" словарь, где одному и тому же ключу будут соответствовать
 несколько русских значений - pair<string,string>, например: strange: чужой, странный...
-б) Заполните словарь парами с помощью метода insert или проинициализируйте с помощью 
+*/
+	multimap<string, string> mmGlossary;
+/*
+б) Заполните словарь парами с помощью метода insert или проинициализируйте с помощью
 вспомогательного массива пара (пары можно конструировать или создавать с помощью шаблона make_pair)
+*/
+	mmGlossary.insert({ "red","Красный" });
+	mmGlossary.insert({ "red","Багровый" });
+	mmGlossary.insert({ "orange","Апельсиновый" });
+	mmGlossary.insert({ "red","Рубиновый" });
+	mmGlossary.insert({ "orange","Ораньжевый" });
+	stop
+/*
 в) Выведите все содержимое словаря на экран
+*/
+	cout << mmGlossary;
+	stop;
+/*
 г) Выведите на экран только варианты "переводов" для заданного ключа. Подсказка: для нахождения диапазона
 итераторов можно использовать методы lower_bound() и upper_bound()
 */
-stop
+	cout << "--------------------------------------------------------------------------------------------------------" << endl;
+	multimap<string, string>::iterator it_multset;
+	multimap<string, string>::iterator it_multset2;
+	it_multset = mmGlossary.lower_bound("red");
+	it_multset2 = mmGlossary.upper_bound("red");
+	while (it_multset!= it_multset2)
+	{
+		cout << *it_multset << endl;
+		++it_multset;
+	}
+	stop
 	return 0;
 }
