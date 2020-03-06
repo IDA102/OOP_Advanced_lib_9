@@ -11,18 +11,13 @@
 #include <iostream>
 #include <Windows.h>
 #include <string>
-//#include <stdexcept>
 #include <vector>
 #include <list>
 #include <deque>
-
-//#include "stdafx.h"
 #include <stack>
 #include <queue>
 #include <set>
 #include <map>
 #include <clocale>
 using namespace std;
-//#include "MyString.h"
 #include "Point.h"
-//#include "ContOut.h"

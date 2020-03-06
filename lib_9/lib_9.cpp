@@ -4,10 +4,10 @@
 #include "H.h"
 //Спросить про особенность с двумя параметрами
 //Спросить про простую прегрузку методов(без шаблона)
-template <typename T, typename TT, typename TTT> ostream& operator<<(ostream& os, map<T,TT,TTT> ms)
+template <typename T, typename TT, typename TTT> ostream& operator<<(ostream& os, map<T, TT, TTT> ms)
 {
 	typename map<T, TT>::iterator it = ms.begin();
-	while(it != ms.end())
+	while (it != ms.end())
 	{
 		cout << (*it).first << "=" << (*it).second << endl;
 		++it;
@@ -24,12 +24,6 @@ template <typename T, typename TT, typename TTT> ostream& operator<<(ostream& os
 	}
 	return os;
 };
-template <typename T> ostream& operator<<(ostream& os, string ms)
-{
-	cout << ms.back(); endl;
-	return os;
-};
-//template <typename T> ostream& operator<<(ostream& os, stack<T> ms)
 template <typename T, typename TT> ostream& operator<<(ostream& os, stack<T,TT> ms)
 {
 	while (ms.size())
@@ -92,6 +86,16 @@ template <typename T> ostream& operator<<(ostream& os, const deque<T> &ms)
 	cout << endl;
 	return os;
 };
+ostream& operator<<(ostream& os, string ms)
+{
+	string::iterator it = ms.begin();
+	while (it!= ms.end())
+	{
+		cout << *it;
+		++it;
+	}
+	return os;
+};
 ostream& operator<<(ostream& os, const Point &ms)
 {
 	cout << ms.x << " " << ms.y;
@@ -102,39 +106,22 @@ ostream& operator<<(ostream& os, pair<string, string> ms)
 	cout << ms.first << "=" << ms.second << endl;
 	return os;
 };
-template<typename T>struct sort_ABC
-{//Почему я не могу определить и отправить предикатор(ответ, потому что так класс устроен(тип компаратор) меня не устраивает)
-	bool operator()(const T &a, const  T &b)const
+bool sortString(const char* a, const char* b)
+{
+	return (strcmp(a, b) < 0);
+};
+class SortString_functor
+{
+public:
+	bool operator()(const char* a, const  char* b) const
 	{
-		return (a[0] > b[0]);
+		return sortString(a,b);
 	}
 };
-template<typename T>struct sort_ABC2
+bool sort_ABC(string a,string b)
 {
-	bool operator()(const T &a, const  T &b)const
-	{
-		return (a > b);
-	}
+	 return (a[0] < b[0]);
 };
-template<typename T> struct sortString
-{
-	bool operator()(const char* a, const char* b)const
-	{
-		return (strcmp(a, b) < 0);
-	}	
-};
-template<typename T> struct sortString2
-{
-	bool operator()(const char* a, const char* b)const
-	{
-		return (strcmp(a, b) < 0);
-	}
-};
-//bool sort_ABC(string a,string b)
-//{
-//	 return (a[0] < b[0]);
-//};
-
 int _tmain(int argc, _TCHAR* argv[])
 {
 	setlocale(LC_ALL, "Russian");
@@ -149,11 +136,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	sInt.push(3);
 	cout << sInt;
 	stop
+	system("cls");
 	queue<int>qInt;
 	qInt.push(1);
 	qInt.push(2);
 	qInt.push(3);
 	cout << qInt;
+	system("cls");
 	stop 
 	priority_queue<int> pqInt;
 	pqInt.push(1);
@@ -162,6 +151,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	pqInt.push(4);
 	pqInt.push(3);
 	cout << pqInt;
+	system("cls");
 	stop
 ////////////////////////////////////////////////////////////////////////////////////
 //stack
@@ -175,15 +165,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	stack<int, vector<int>> svInt(vInt);
 	cout << vInt << endl;
 	cout << svInt << endl;
+	system("cls");
 	stop
-
-	//deque<int> dInt = {1, 2, 3, 4, 5};
-	//stack<int, deque<int>> svInt(dInt);//Как пропихнуть  в аргумент инициализатор????????
-	//cout << dInt << endl;
-	//cout << svInt << endl;
-	//stop
-
-	
 ////////////////////////////////////////////////////////////////////////////////////
 //queue
 /*
@@ -237,6 +220,7 @@ a) создайте множество с элементами типа Point - подумайте, что необходимо опреде
 
 //б) распечатайте значения элементов с помощью шаблона, реализованного в предыдущей лаб. работе
 	cout << sPoint;
+	system("cls");
 	stop
 //в) попробуйте изменить любое значение...
 	//set<Point>::iterator it = sPoint.begin(); 
@@ -253,7 +237,7 @@ a) создайте множество с элементами типа Point - подумайте, что необходимо опреде
 	stop
 //д) Вставьте в любое множество диапазон элементов из любого другого контейнера, например, элементов массива (что происходит, если в массиве имеются дубли?)
 	int vInt2[] = { 1,2,3,4,5 };
-	int rvInt2[] = { 5,4,3,2,1,6 };//Дубли удаляются
+	int rvInt2[] = { 5,4,3,2,1,6 };//Дубли игнорируются
 	set<int> svInt3(vInt2, vInt2 + 5);
 	svInt3.insert( rvInt2, rvInt2+6);
 	stop
@@ -268,7 +252,8 @@ map, multiset
 	mList.insert({ "WWW", 200 }); //Как интерпритироать эту строчку??
 	stop
 //в) распечатайте содержимое
-		cout << mList;
+	cout << mList;
+	system("cls");
 	stop
 	//г) замените один из КЛЮЧЕЙ на новый (была "Иванова", вышла замуж => стала "Петрова")	
 	const char *old_name = "QQQ";
@@ -291,13 +276,14 @@ map, multiset
 количество повторений каждой строки в векторе
 */
 	vector<string> vString = { "QWE" , "RTY" , "UIO" , "QWE" , "RTY" };
-	map<string, int, sort_ABC<string>> mString;
+	map<string, int,bool (*)(string a, string b)> mString(sort_ABC);
 
 	for (size_t i = 0; i < vString.size(); i++)
 	{
-		mString[vString[i]] = mString[vString[i]] + 1;
+		mString[vString[i]] = mString[vString[i]]++;
 	}
 	cout << mString;
+	system("cls");
 	stop
 /*
 е) 
@@ -314,7 +300,9 @@ const char* words[] = {"Abba", "Alfa", "Beta", "Beauty" ,...};
 	const char* words[] = { "Abba", "Alfa", "Beta", "Beauty", "Abba", "Alfa", "Beta", "Beauty" };
 	//const char* words[] = { "AA", "AAA", "BB", "BBB", "CC", "CCC", "Q", "QA" };
 	stop
-	map<char,set<const char*,sortString<const char*>>,sort_ABC2<char>> mWords;
+	//map<char,set<const char*,sortString<const char*>>,sort_ABC2<char>> mWords;
+	//map<char,set<const char*,bool (*)(const char* a, const char* b)>, sort_ABC2<char>> mWords;
+	map<char,set<const char*, SortString_functor>> mWords;
 	for (size_t i = 0; i < 8; i++)
 	{
 		(mWords[*words[i]]).insert(words[i]);
@@ -328,12 +316,11 @@ const char* words[] = {"Abba", "Alfa", "Beta", "Beauty" ,...};
 Сами группы тоже должны быть упорядочены по номеру		
 номера 
 */
-	map<int, multiset<const char*, sortString2<const char*>>> mGroups;
+	map<int, multiset<const char*, SortString_functor>> mGroups;
 	(mGroups[4512]).insert("Paramoshkin");
 	(mGroups[4513]).insert("Paramoshkin");
 	(mGroups[4513]).insert("Paramoshkin");
 	(mGroups[4513]).insert("Ivanov");
-	
 	stop
 ////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -356,6 +343,7 @@ multimap
 в) Выведите все содержимое словаря на экран
 */
 	cout << mmGlossary;
+	system("cls");
 	stop;
 /*
 г) Выведите на экран только варианты "переводов" для заданного ключа. Подсказка: для нахождения диапазона
@@ -368,9 +356,10 @@ multimap
 	it_multset2 = mmGlossary.upper_bound("red");
 	while (it_multset!= it_multset2)
 	{
-		cout << *it_multset << endl;
+		cout << *it_multset;
 		++it_multset;
 	}
+	system("cls");
 	stop
 	return 0;
 }
